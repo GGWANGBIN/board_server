@@ -1,10 +1,12 @@
 package board.board.controller;
 
-import board.board.dto.IdDoubleCheckDTO;
-import board.board.dto.SignUpRequestDTO;
+import board.board.dto.MemberInfoDTO;
 import board.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 
 @RestController
@@ -13,13 +15,13 @@ public class HelloController {
 
     private final UserService userService;
 
-    @PostMapping("hello")
+    @PostMapping("/hello")
     public String hello(){
         System.out.println();
         return "ㅎㅎ";
     }
 
-    @GetMapping("/idDoubleCheck")
+    @GetMapping("/IdDoubleCheck")
     public String idDoubleCheck(@RequestParam String id) {
 
         String idDoubleCheck = userService.idDoubleCheck(id);
@@ -30,16 +32,43 @@ public class HelloController {
         else {
             return "block";
         }
-
     }
 
-    @PostMapping("/signUp")
-    public String signUp(@RequestBody SignUpRequestDTO dto) {
+    @PostMapping("/SignUp")
+    public String signUp(@RequestBody MemberInfoDTO dto) {
 
         int signUp = userService.signUp(dto);
 
         return "";
+    }
 
+    @GetMapping("/MemberCheck")
+    public String memberCheck(@RequestParam HashMap<String, Object> param) {
+        String memberCheck = userService.memberCheck(param);
+
+        if(memberCheck == null) {
+            return "missmatch";
+        }
+        else return "match";
+    }
+
+    @PostMapping("/ChangePassword")
+    public String changePassword(@RequestBody MemberInfoDTO dto) {
+        int changePassword = userService.changePassword(dto);
+
+        return "";
+    }
+
+    @GetMapping("/Login")
+    public String Login(@RequestParam HashMap<String, Object> param, HttpSession session) {
+
+        String Login = userService.Login(param);
+
+        if(Login == null) {
+            return "false";
+        } else {
+            return "Login";
+        }
     }
 
 

@@ -7,7 +7,20 @@
         WHERE USERID = #{id}
     </select>
 
-    <insert id="signUp" parameterType="board.board.dto.SignUpRequestDTO">
+    <insert id="signUp" parameterType="board.board.dto.MemberInfoDTO">
         INSERT INTO MEMBER (NAME,USERID,PWD) VALUE(#{name}, #{id}, #{password})
     </insert>
+
+    <select id="memberCheck" parameterType="HashMap" resultType="String">
+        SELECT * FROM MEMBER
+        WHERE USERID = #{id} AND PWD = #{password}
+    </select>
+    
+    <update id="changePassword" parameterType="board.board.dto.MemberInfoDTO">
+        UPDATE MEMBER SET PWD = #{password} WHERE USERID = #{id}
+    </update>
+
+    <select id="Login" parameterType="HashMap" resultType="String">
+        SELECT * FROM MEMBER WHERE USERID = #{id} AND PWD = #{password}
+    </select>
 </mapper>
