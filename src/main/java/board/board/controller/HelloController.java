@@ -35,11 +35,8 @@ public class HelloController {
     }
 
     @PostMapping("/SignUp")
-    public String signUp(@RequestBody MemberInfoDTO dto) {
-
+    public void signUp(@RequestBody MemberInfoDTO dto) {
         int signUp = userService.signUp(dto);
-
-        return "";
     }
 
     @GetMapping("/MemberCheck")
@@ -53,10 +50,8 @@ public class HelloController {
     }
 
     @PostMapping("/ChangePassword")
-    public String changePassword(@RequestBody MemberInfoDTO dto) {
+    public void changePassword(@RequestBody MemberInfoDTO dto) {
         int changePassword = userService.changePassword(dto);
-
-        return "";
     }
 
     @GetMapping("/Login")
@@ -67,10 +62,10 @@ public class HelloController {
         if(Login == null) {
             return "false";
         } else {
+            session.setAttribute("userid", param.get("id"));
             return "Login";
         }
+
     }
-
-
 
 }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board.board.mapper.BoardMapper">
+    <select id="boardList" parameterType="String" resultType="board.board.dto.BoardDTO">
+        SELECT ID, WRITER, TITLE, CONTENT, HIT, create_date AS createDate,
+               (SELECT COUNT(*) FROM COMMENT WHERE BOARD.ID = PARENTSEQ) AS commentCnt
+        FROM BOARD
+        WHERE SECRET = '공개' OR SECRET = '비공개' AND WRITER = #{userid}
+        ORDER BY ID DESC
+    </select>
+
+    <select id="myBoardList" parameterType="board.board.dto.BoardDTO" resultType="board.board.dto.BoardDTO">
+        SELECT ID, WRITER, TITLE, CONTENT, HIT, create_date AS createDate,SECRET,
+               (SELECT COUNT(*) FROM COMMENT WHERE BOARD.ID = PARENTSEQ) AS commentCnt
+        FROM BOARD
+        WHERE WRITER = #{userid}
+        <if test="searchMenu == ''">
+            and TITLE LIKE CONCAT('%', #{searchText}, '%') OR WRITER LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+        <if test="searchMenu == 'title'">
+            and TITLE LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+        <if test="searchMenu == 'writer'">
+            and WRITER LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+        ORDER BY ID DESC
+    </select>
+
+    <select id="boardDetail" parameterType="String" resultType="board.board.dto.BoardDTO">
+        SELECT ID,TITLE,CONTENT,WRITER,CREATE_DATE AS createDate,HIT
+        FROM BOARD
+        WHERE ID = #{id}
+    </select>
+
+    <update id="updateHit" parameterType="String">
+        UPDATE BOARD SET HIT = HIT + 1 WHERE ID = #{id}
+    </update>
+
+    <select id="getComment" parameterType="String" resultType="board.board.dto.BoardDTO">
+        SELECT ID,COMMENT_CONTENT AS CONTENT,WRITER,CREATE_DATE AS createDate
+        FROM COMMENT
+        WHERE PARENTSEQ = #{id}
+    </select>
+
+    <insert id="addComment" parameterType="board.board.dto.CommentDTO">
+        INSERT INTO COMMENT (COMMENT_CONTENT,CREATE_DATE,WRITER,PARENTSEQ)
+        VALUES (#{content},now(),#{writer},#{id})
+    </insert>
+
+    <update id="modifyComment" parameterType="board.board.dto.CommentDTO">
+        UPDATE COMMENT SET COMMENT_CONTENT = #{content}, CREATE_DATE = now() WHERE ID = #{id}
+    </update>
+
+    <insert id="goNewBoard" parameterType="board.board.dto.BoardDTO">
+        INSERT INTO BOARD (TITLE,CREATE_DATE,CONTENT,WRITER,SECRET)
+        VALUES (#{title},now(),#{content},#{writer},'공개')
+    </insert>
+
+    <update id="goModifyBoard" parameterType="board.board.dto.BoardDTO">
+        UPDATE BOARD SET TITLE = #{title}, CONTENT = #{content} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteComment" parameterType="board.board.dto.CommentDTO">
+        DELETE FROM COMMENT WHERE ID = #{id}
+    </delete>
+
+    <delete id="deleteBoard" parameterType="board.board.dto.BoardDTO">
+        DELETE FROM BOARD WHERE ID = #{id}
+    </delete>
+
+    <update id="scretYtoN" parameterType="board.board.dto.BoardDTO">
+        UPDATE BOARD SET SECRET = '비공개' WHERE ID = #{id}
+    </update>
+
+    <update id="scretNtoY" parameterType="board.board.dto.BoardDTO">
+        UPDATE BOARD SET SECRET = '공개' WHERE ID = #{id}
+    </update>
+
+    <select id="myCommentList" parameterType="String" resultType="HashMap">
+        SELECT BOARD.id,title,COMMENT_CONTENT AS content,COMMENT.CREATE_DATE as createDate,COMMENT.writer,(SELECT COUNT(*) FROM COMMENT WHERE BOARD.ID = PARENTSEQ) AS commentCnt
+        FROM BOARD
+        RIGHT JOIN COMMENT ON COMMENT.PARENTSEQ = BOARD.ID
+        WHERE BOARD.WRITER = #{userid}
+        ORDER BY COMMENT.CREATE_DATE DESC
+    </select>
+
+</mapper>
