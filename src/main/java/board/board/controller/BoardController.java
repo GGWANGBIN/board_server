@@ -118,14 +118,27 @@ public class BoardController {
         int deleteBoard = boardService.deleteBoard(dto);
     }
 
-    @PutMapping("/ScretYtoN")
+    @PutMapping("/SecretYtoN")
     public void scretYtoN(@RequestBody BoardDTO dto) {
-        int scretYtoN = boardService.scretYtoN(dto);
+        int scretYtoN = boardService.secretYtoN(dto);
     }
 
-    @PutMapping("/ScretNtoY")
+    @PutMapping("/SecretNtoY")
     public void scretNtoY(@RequestBody BoardDTO dto) {
-        int scretYtoN = boardService.scretNtoY(dto);
+        int scretYtoN = boardService.secretNtoY(dto);
+    }
+
+    @PutMapping("/SecretYtoNComment")
+    public void scretYtoNComment(@RequestBody CommentDTO dto) {
+
+        System.out.println(dto);
+
+        int scretYtoN = boardService.secretYtoNComment(dto);
+    }
+
+    @PutMapping("/SecretNtoYComment")
+    public void scretNtoYComment(@RequestBody CommentDTO dto) {
+        int scretYtoN = boardService.secretNtoYComment(dto);
     }
 
     @GetMapping("/MyComment")

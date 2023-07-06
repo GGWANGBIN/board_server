@@ -38,14 +38,14 @@
     </update>
 
     <select id="getComment" parameterType="String" resultType="board.board.dto.BoardDTO">
-        SELECT ID,COMMENT_CONTENT AS CONTENT,WRITER,CREATE_DATE AS createDate
+        SELECT ID,COMMENT_CONTENT AS CONTENT,WRITER,CREATE_DATE AS createDate, SECRET
         FROM COMMENT
         WHERE PARENTSEQ = #{id}
     </select>
 
     <insert id="addComment" parameterType="board.board.dto.CommentDTO">
-        INSERT INTO COMMENT (COMMENT_CONTENT,CREATE_DATE,WRITER,PARENTSEQ)
-        VALUES (#{content},now(),#{writer},#{id})
+        INSERT INTO COMMENT (COMMENT_CONTENT,CREATE_DATE,WRITER,PARENTSEQ,SECRET)
+        VALUES (#{content},now(),#{writer},#{id},'공개')
     </insert>
 
     <update id="modifyComment" parameterType="board.board.dto.CommentDTO">
@@ -69,16 +69,24 @@
         DELETE FROM BOARD WHERE ID = #{id}
     </delete>
 
-    <update id="scretYtoN" parameterType="board.board.dto.BoardDTO">
+    <update id="secretYtoN" parameterType="board.board.dto.BoardDTO">
         UPDATE BOARD SET SECRET = '비공개' WHERE ID = #{id}
     </update>
 
-    <update id="scretNtoY" parameterType="board.board.dto.BoardDTO">
+    <update id="secretNtoY" parameterType="board.board.dto.BoardDTO">
         UPDATE BOARD SET SECRET = '공개' WHERE ID = #{id}
     </update>
 
+    <update id="secretYtoNComment" parameterType="board.board.dto.CommentDTO">
+        UPDATE COMMENT SET SECRET = '비공개' WHERE ID = #{id}
+    </update>
+
+    <update id="secretNtoYComment" parameterType="board.board.dto.CommentDTO">
+        UPDATE COMMENT SET SECRET = '공개' WHERE ID = #{id}
+    </update>
+
     <select id="myCommentList" parameterType="String" resultType="HashMap">
-        SELECT BOARD.id,title,COMMENT_CONTENT AS content,COMMENT.CREATE_DATE as createDate,COMMENT.writer,(SELECT COUNT(*) FROM COMMENT WHERE BOARD.ID = PARENTSEQ) AS commentCnt
+        SELECT BOARD.id,title,COMMENT_CONTENT AS content,COMMENT.CREATE_DATE as createDate,COMMENT.writer,(SELECT COUNT(*) FROM COMMENT WHERE BOARD.ID = PARENTSEQ) AS commentCnt,COMMENT.SECRET AS secret,COMMENT.ID AS commentId
         FROM BOARD
         RIGHT JOIN COMMENT ON COMMENT.PARENTSEQ = BOARD.ID
         WHERE BOARD.WRITER = #{userid}

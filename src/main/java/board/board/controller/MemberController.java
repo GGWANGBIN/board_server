@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
-public class HelloController {
+public class MemberController {
 
     private final UserService userService;
 

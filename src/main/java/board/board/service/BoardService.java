@@ -37,10 +37,14 @@ public class BoardService {
 
     public List<BoardDTO> myBoardList(BoardDTO dto) { return boardMapper.myBoardList(dto);}
 
-    public int scretYtoN(BoardDTO dto) { return boardMapper.scretYtoN(dto);}
+    public int secretYtoN(BoardDTO dto) { return boardMapper.secretYtoN(dto);}
 
-    public int scretNtoY(BoardDTO dto) { return boardMapper.scretNtoY(dto);}
+    public int secretNtoY(BoardDTO dto) { return boardMapper.secretNtoY(dto);}
 
     public List<BoardDTO> myCommentList(String userid) { return boardMapper.myCommentList(userid);}
+
+    public int secretYtoNComment(CommentDTO dto) { return boardMapper.secretYtoNComment(dto);}
+
+    public int secretNtoYComment(CommentDTO dto) { return boardMapper.secretNtoYComment(dto);}
 
 }

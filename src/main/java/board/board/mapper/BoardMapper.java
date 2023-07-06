@@ -31,9 +31,13 @@ public interface BoardMapper {
 
     List<BoardDTO> myBoardList(BoardDTO dto);
 
-    int scretYtoN(BoardDTO dto);
+    int secretYtoN(BoardDTO dto);
 
-    int scretNtoY(BoardDTO dto);
+    int secretNtoY(BoardDTO dto);
 
     List<BoardDTO> myCommentList(String userid);
+
+    int secretYtoNComment(CommentDTO dto);
+
+    int secretNtoYComment(CommentDTO dto);
 }

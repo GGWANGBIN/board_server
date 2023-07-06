@@ -8,4 +8,5 @@ public class CommentDTO {
   String content;
   String createDate;
   String writer;
+  String secret;
 }
