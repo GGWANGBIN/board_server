@@ -21,5 +21,5 @@ public class UserService {
 
     public int changePassword(MemberInfoDTO dto) {return userMapper.changePassword(dto);}
 
-    public String Login(HashMap<String, Object> param) {return userMapper.Login(param);}
+    public MemberInfoDTO Login(HashMap<String, Object> param) {return userMapper.Login(param);}
 }

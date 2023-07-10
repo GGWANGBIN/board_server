@@ -15,5 +15,5 @@ public interface UserMapper {
 
     int changePassword(MemberInfoDTO dto);
 
-    String Login(HashMap<String, Object> param);
+    MemberInfoDTO Login(HashMap<String, Object> param);
 }

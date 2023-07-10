@@ -2,11 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="board.board.mapper.BoardMapper">
-    <select id="boardList" parameterType="String" resultType="board.board.dto.BoardDTO">
+    <select id="boardList" parameterType="board.board.dto.BoardDTO" resultType="board.board.dto.BoardDTO">
         SELECT ID, WRITER, TITLE, CONTENT, HIT, create_date AS createDate,
                (SELECT COUNT(*) FROM COMMENT WHERE BOARD.ID = PARENTSEQ) AS commentCnt
         FROM BOARD
-        WHERE SECRET = '공개' OR SECRET = '비공개' AND WRITER = #{userid}
+        WHERE (SECRET = '공개' OR SECRET = '비공개' AND WRITER = #{userid})
+        <if test="searchMenu == ''">
+            and TITLE LIKE CONCAT('%', #{searchText}, '%') OR WRITER LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+        <if test="searchMenu == 'title'">
+            and TITLE LIKE CONCAT('%', #{searchText}, '%')
+        </if>
+        <if test="searchMenu == 'writer'">
+            and WRITER LIKE CONCAT('%', #{searchText}, '%')
+        </if>
         ORDER BY ID DESC
     </select>
 

@@ -20,7 +20,7 @@
         UPDATE MEMBER SET PWD = #{password} WHERE USERID = #{id}
     </update>
 
-    <select id="Login" parameterType="HashMap" resultType="String">
-        SELECT * FROM MEMBER WHERE USERID = #{id} AND PWD = #{password}
+    <select id="Login" parameterType="HashMap" resultType="board.board.dto.MemberInfoDTO">
+        SELECT ID,PWD AS password FROM MEMBER WHERE USERID = #{id}
     </select>
 </mapper>

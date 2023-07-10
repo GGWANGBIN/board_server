@@ -4,18 +4,12 @@ import board.board.dto.BoardDTO;
 import board.board.dto.CommentDTO;
 import board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,11 +18,14 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/BoardList")
-    public List boardList(HttpSession session) {
+    public List boardList(HttpSession session,BoardDTO dto) {
 
-        String userid = (String) session.getAttribute("userid");
+        dto.setUserid((String) session.getAttribute("userid"));
 
-        List<BoardDTO> boardList = boardService.boardList(userid);
+        List<BoardDTO> boardList = boardService.boardList(dto);
+
+        System.out.println(dto);
+        System.out.println(boardList);
 
         return boardList;
     }
@@ -39,8 +36,6 @@ public class BoardController {
         dto.setUserid((String) session.getAttribute("userid"));
 
         List<BoardDTO> boardList = boardService.myBoardList(dto);
-
-        System.out.println(boardList);
 
         return boardList;
     }

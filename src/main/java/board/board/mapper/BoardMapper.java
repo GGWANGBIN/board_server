@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
 
-    List boardList(String userid);
+    List<BoardDTO> boardList(BoardDTO dto);
 
     List<BoardDTO> boardDetail(String id);
 

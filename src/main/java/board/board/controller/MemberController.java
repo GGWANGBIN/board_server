@@ -3,8 +3,9 @@ package board.board.controller;
 import board.board.dto.MemberInfoDTO;
 import board.board.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
@@ -13,13 +14,10 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final UserService userService;
+    @Autowired
+    private PasswordEncoder pwEncoder;
 
-    @PostMapping("/hello")
-    public String hello(){
-        System.out.println();
-        return "ㅎㅎ";
-    }
+    private final UserService userService;
 
     @GetMapping("/IdDoubleCheck")
     public String idDoubleCheck(@RequestParam String id) {
@@ -36,6 +34,14 @@ public class MemberController {
 
     @PostMapping("/SignUp")
     public void signUp(@RequestBody MemberInfoDTO dto) {
+
+        String rawPw = "";
+        String encodePw = "";
+
+        rawPw = dto.getPassword();
+        encodePw = pwEncoder.encode(rawPw);
+        dto.setPassword(encodePw);
+
         int signUp = userService.signUp(dto);
     }
 
@@ -57,9 +63,9 @@ public class MemberController {
     @GetMapping("/Login")
     public String Login(@RequestParam HashMap<String, Object> param, HttpSession session) {
 
-        String Login = userService.Login(param);
+        MemberInfoDTO Login = userService.Login(param);
 
-        if(Login == null) {
+        if(!pwEncoder.matches((CharSequence) param.get("password"),Login.getPassword())) {
             return "false";
         } else {
             session.setAttribute("userid", param.get("id"));

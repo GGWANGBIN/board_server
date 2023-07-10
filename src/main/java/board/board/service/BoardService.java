@@ -15,7 +15,7 @@ public class BoardService {
     private final BoardMapper boardMapper;
 
 
-    public List boardList(String userid) { return boardMapper.boardList(userid);}
+    public List<BoardDTO> boardList(BoardDTO dto) { return boardMapper.boardList(dto);}
 
     public List<BoardDTO> boardDetail(String id) { return boardMapper.boardDetail(id);}
 
